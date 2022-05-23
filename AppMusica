@@ -1,0 +1,61 @@
+package com.example.app_media_player;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Context;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.SeekBar;
+
+public class MainActivity extends AppCompatActivity {
+
+    MediaPlayer mediaPlayer;
+    AudioManager audioManager;
+
+
+    public void iniciar (View play) {
+        mediaPlayer.start();
+    }
+    public void pausar (View pause) {
+        mediaPlayer.pause();
+    }
+    public void parar (View stop)  { mediaPlayer.stop(); mediaPlayer= MediaPlayer.create(this,R.raw.musica);}
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+
+        int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        int currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+
+        mediaPlayer = MediaPlayer.create(this, R.raw.musica);
+
+        SeekBar seekBar = (SeekBar) findViewById(R.id.volumeSeekBar);
+        seekBar.setMax(maxVolume);
+        seekBar.setProgress(currentVolume);
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,progress,0);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+    }
+
+    }
